@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoVision - Home</title>
+    <link rel="icon" type="image/x-icon" href="https://cdn.icon-icons.com/icons2/1487/PNG/512/8369-bitcoin_102502.png"">
+    <link href=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-light: #d0f765;
+            --text-light: #333;
+            --bg-dark: #121212;
+            --text-dark: #f0f0f0;
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            background-image: url('https://cdn.pixabay.com/photo/2018/01/18/07/31/bitcoin-3089728_1280.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            color: var(--text-light);
+            transition: var(--transition);
+
+        }
+
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.1) !important;
+            backdrop-filter: blur(50px);
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+        }
+
+        .dark-mode .navbar {
+            background-color: rgba(26, 38, 52, 0.1) !important;
+        }
+
+        .dark-mode .navbar.scrolled {
+            background-color: rgba(26, 38, 52, 0.9) !important;
+        }
+
+        .navbar-brand,
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+
+        .crypto-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .dark-mode .crypto-card {
+            background-color: rgba(30, 30, 30, 0.8);
+        }
+
+        .crypto-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .crypto-icon {
+            width: 50px;
+            height: 50px;
+            transition: var(--transition);
+        }
+
+        .crypto-card:hover .crypto-icon {
+            transform: scale(1.2) rotate(360deg);
+        }
+
+        .btn-custom {
+            transition: var(--transition);
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #mode-toggle {
+            cursor: pointer;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 2;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .price-change-positive {
+            color: #4CAF50;
+        }
+
+        .price-change-negative {
+            color: #F44336;
+        }
+
+        .education-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .dark-mode .education-section {
+            background-color: rgba(30, 30, 30, 0.9);
+        }
+
+        .nft-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .dark-mode .nft-section {
+            background-color: rgba(30, 30, 30, 0.9);
+        }
+
+        .achievement-badge {
+            width: 50px;
+            height: 50px;
+            background-color: gold;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+
+        #mode-toggle {
+            font-size: 1.5em;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @media (max-width: 991px) {
+            #mode-toggle {
+                position: static;
+                margin-left: 15px;
+                transform: none;
+            }
+        }
+
+        .h2 {
+            font-family: cursive;
+        }
+
+        .li {
+            color: #4CAF50;
+        }
+
+        .navbar {
+            font-family: cursive;
+        }
+
+
+
+        .navbar-nav .dropdown-toggle::after {
+            display: none;
+        }
+
+        .navbar-nav .dropdown-toggle img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            color: aliceblue;
+        }
+
+        .dropdown-menu {
+            right: 0;
+            left: auto;
+        }
+
+        .text-danger {
+            color: #dc3545 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar-nav .dropdown-menu {
+                position: static;
+                float: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">CryptoVision Pro</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#securityModal">Security</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#education">Crypto Academy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#nft">NFT Marketplace</a>
+                    </li>
+                </ul>
+                <div class="navbar-nav ml-2">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://cdn.icon-icons.com/icons2/1387/PNG/512/cryptocurrencytransferexchangebitcoinpayment_95893.png"
+                                alt="Profile" class="rounded-circle" />
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Bank Accounts</a></li>
+                            <li><a class="dropdown-item" href="#">Recent Purchases</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <span id="mode-toggle" class="navbar-text">&#9728;</span>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row" id="crypto-container"></div>
+    </div>
+
+    <div class="container education-section" id="education">
+        <h2 class="h2">Crypto Academy</h2>
+        <p>Learn about blockchain technology and cryptocurrency concepts:</p>
+        <ul>
+            <li><a class="li" href="https://www.investopedia.com/terms/b/blockchain.asp">Introduction to Blockchain</a>
+            </li>
+            <li><a class="li" href="https://www.investopedia.com/terms/c/cryptocurrency.asp">Understanding
+                    Cryptocurrencies</a>
+            </li>
+            <li><a class="li" href="https://www.investopedia.com/decentralized-finance-defi-5113835">Decentralized
+                    Finance (DeFi)
+                    Explained</a></li>
+            <li><a class="li" href="https://www.bbc.com/news/technology-56371912">NFTs: The New Digital Asset</a></li>
+        </ul>
+    </div>
+
+    <div class="container nft-section" id="nft">
+        <h2 class="h2">NFT Marketplace</h2>
+        <p>Explore and trade unique digital assets:</p>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://mudrex.com/learn/wp-content/uploads/2023/04/WhatsApp-Image-2023-03-30-at-1.03.30-PM-2-jpeg.webp"
+                        class="card-img-top" alt="NFT Art">
+                    <div class="card-body">
+                        <h5 class="card-title">Digital Masterpiece</h5>
+                        <p class="card-text">A unique piece of digital art.</p>
+                        <a href="#" class="btn btn-primary">Bid Now</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Security Modal -->
+    <div class="modal fade" id="securityModal" tabindex="-1" aria-labelledby="securityModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="securityModalLabel">Security Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="twoFAToggle" class="form-label">Two-Factor Authentication</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="twoFAToggle">
+                            <label class="form-check-label" for="twoFAToggle">Enable 2FA</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="biometricToggle" class="form-label">Biometric Verification</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="biometricToggle">
+                            <label class="form-check-label" for="biometricToggle">Enable Biometric Login</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cryptoContainer = document.getElementById('crypto-container');
+        const modeToggle = document.getElementById('mode-toggle');
+        const body = document.body;
+
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+
+        async function fetchCryptoData() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=true');
+                const data = await response.json();
+                updateCryptoCards(data);
+            } catch (error) {
+                console.error('Error fetching crypto data:', error);
+            }
+        }
+
+        function updateCryptoCards(cryptos) {
+            cryptoContainer.innerHTML = '';
+            cryptos.forEach(crypto => {
+                const card = createCryptoCard(crypto);
+                cryptoContainer.appendChild(card);
+            });
+        }
+
+        function createCryptoCard(crypto) {
+            const card = document.createElement('div');
+            card.className = 'col-md-6 col-lg-4 mb-4 fade-in';
+            card.innerHTML = `
+                <div class="crypto-card p-3">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="${crypto.image}" alt="${crypto.name}" class="crypto-icon me-3">
+                        <h3>${crypto.name} (${crypto.symbol.toUpperCase()})</h3>
+                    </div>
+                    <p class="fs-4">$${crypto.current_price.toLocaleString()}</p>
+                    <p class="fs-6 ${crypto.price_change_percentage_24h >= 0 ? 'price-change-positive' : 'price-change-negative'}">
+                        24h Change: ${crypto.price_change_percentage_24h.toFixed(2)}%
+                    </p>
+                    <div class="chart-container">
+                        <canvas id="chart-${crypto.id}"></canvas>
+                    </div>
+                    <button class="btn btn-primary btn-custom mt-3" onclick="tradeCrypto('${crypto.symbol}')">Trade ${crypto.symbol.toUpperCase()}</button>
+                    <div class="mt-3">
+                        <span class="achievement-badge" title="Trading Pro">🏆</span>
+                        <span class="achievement-badge" title="Early Adopter">🚀</span>
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                createChart(crypto);
+            }, 0);
+
+            return card;
+        }
+
+
+        function createChart(crypto) {
+            const ctx = document.getElementById(`chart-${crypto.id}`).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [...Array(crypto.sparkline_in_7d.price.length).keys()],
+                    datasets: [{
+                        label: '7d Price Trend',
+                        data: crypto.sparkline_in_7d.price,
+                        borderColor: '#4CAF50',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to change navbar transparency on scroll
+        function handleNavbarTransparency() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll event listener
+        window.addEventListener('scroll', handleNavbarTransparency);
+
+        function tradeCrypto(symbol) {
+            alert(`Initiating trade for ${symbol.toUpperCase()}. This feature is coming soon!`);
+        }
+
+        fetchCryptoData();
+        setInterval(fetchCryptoData, 10000);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
